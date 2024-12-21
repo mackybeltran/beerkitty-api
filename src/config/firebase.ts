@@ -1,9 +1,11 @@
 import * as admin from 'firebase-admin'
 import 'dotenv/config'
 
+const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, '\n')
+
 admin.initializeApp({
     credential: admin.credential.cert({
-        privateKey: process.env.PRIVATE_KEY,
+        privateKey: privateKey,
         projectId: process.env.PROJECT_ID,
         clientEmail: process.env.CLIENT_EMAIL
     }),
