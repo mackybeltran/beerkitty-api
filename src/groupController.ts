@@ -4,7 +4,7 @@ import { db } from './config/firebase'
 type GroupType = {
 
     name: string,
-    userId: string
+    user_id: string
     groupName: string
 
 }
@@ -17,7 +17,7 @@ type Request  = {
 }
 
 const addGroup = async (req: Request, res: Response) => {
-    const { name, userId, groupName } = req.body
+    const { name, user_id, groupName } = req.body
     try {
         const group = db.collection('groups').doc()
         const groupObject = {
@@ -25,7 +25,7 @@ const addGroup = async (req: Request, res: Response) => {
             members: [
                 {
                     name,
-                    userId,
+                    user_id,
                     funds: 0
                 }
             ],
