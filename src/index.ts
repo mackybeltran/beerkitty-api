@@ -24,5 +24,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/groups', addGroup)
-app.patch('/groups//:id/members', addMember)
+
+app.patch('/groups/:id/members/', addMember)
+
 exports.app = functions.https.onRequest(app);

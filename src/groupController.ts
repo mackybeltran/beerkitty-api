@@ -59,9 +59,9 @@ const addGroup = async (req: addGroupRequest, res: Response) => {
 }
 
 const addMember = async (req: addMemberRequest, res: Response) => {
-    const { name, user_id } = req.body
+    const { body: { name, user_id }, params: { id }} = req
     try {
-        db.collection('groups').doc(req.params.id)
+        await db.collection('groups').doc(id)
         .update('members', FieldValue.arrayUnion({
             name,
             funds: 0,
