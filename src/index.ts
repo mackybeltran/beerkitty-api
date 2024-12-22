@@ -16,7 +16,7 @@
 
 import * as functions from 'firebase-functions';
 import * as express from 'express';
-import { addGroup } from './groupController'
+import { addGroup, addMember } from './groupController'
 
 const app = express();
 app.get('/', (req, res) => {
@@ -24,4 +24,5 @@ app.get('/', (req, res) => {
 });
 
 app.post('/groups', addGroup)
+app.patch('/groups//:id/members', addMember)
 exports.app = functions.https.onRequest(app);

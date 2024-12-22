@@ -1,23 +1,38 @@
 import { Response } from 'express'
 import { db } from './config/firebase'
+import { FieldValue } from 'firebase-admin/firestore'
 
 type GroupType = {
 
     name: string,
     user_id: string
-    groupName: string
+    group_name: string
 
 }
 
-type Request  = {
+type addGroupRequest  = {
 
     body: GroupType,
-    params: { groupId: string }
+    // params: { groupId: string }
 
 }
 
-const addGroup = async (req: Request, res: Response) => {
-    const { name, user_id, groupName } = req.body
+type MemberType = {
+
+    name: string,
+    user_id: string
+
+}
+
+type addMemberRequest = {
+
+    body: MemberType
+    params: { id: string }
+
+}
+
+const addGroup = async (req: addGroupRequest, res: Response) => {
+    const { name, user_id, group_name } = req.body
     try {
         const group = db.collection('groups').doc()
         const groupObject = {
@@ -29,7 +44,7 @@ const addGroup = async (req: Request, res: Response) => {
                     funds: 0
                 }
             ],
-            groupName
+            group_name
         }
 
         group.set(groupObject)
@@ -43,4 +58,25 @@ const addGroup = async (req: Request, res: Response) => {
     }
 }
 
-export { addGroup }
+const addMember = async (req: addMemberRequest, res: Response) => {
+    const { name, user_id } = req.body
+    try {
+        db.collection('groups').doc(req.params.id)
+        .update('members', FieldValue.arrayUnion({
+            name,
+            funds: 0,
+            user_id 
+        }))
+        res.status(200).send({
+            status: 'success',
+            message: 'entry added successfully',
+            data: {
+                name
+            }
+        })
+    } catch(error:any) {
+        res.status(500).json(error.message)
+    }
+}
+
+export { addGroup, addMember }
